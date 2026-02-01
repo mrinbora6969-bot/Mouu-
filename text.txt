@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Mouuuu 💗</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+height:100vh;
+background:linear-gradient(135deg,#f9e4e7,#fff1ec);
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:'Poppins',sans-serif;
+overflow:hidden;
+}
+
+.screen{
+text-align:center;
+padding:20px;
+position:relative;
+width:100%;
+height:100%;
+}
+
+h1{
+font-size:22px;
+color:#4a3b40;
+margin-bottom:15px
+}
+
+button{
+padding:12px 26px;
+font-size:16px;
+border-radius:25px;
+border:none;
+cursor:pointer;
+margin:10px;
+}
+
+.yes{
+background:#f28ca8;
+color:#fff;
+}
+
+.no{
+background:#e0e0e0;
+color:#555;
+position:absolute;
+}
+
+.hidden{display:none}
+
+/* Cats */
+.cat{
+width:120px;
+margin:10px auto 20px;
+animation:catBounce 2s infinite ease-in-out;
+}
+
+#crycat{display:none}
+
+@keyframes catBounce{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+}
+
+#convinceText{
+color:#7a5c65;
+margin-top:10px
+}
+
+/* Envelope */
+.envelope-wrapper{
+width:320px;
+height:220px;
+margin-top:20px;
+position:relative;
+margin-left:auto;
+margin-right:auto;
+}
+
+#envelope{
+width:100%;
+height:100%;
+background:#fff;
+border-radius:8px;
+cursor:pointer;
+position:relative;
+box-shadow:0 25px 45px rgba(0,0,0,.12);
+}
+
+#envelope::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,#e9a6b1,#f2b8c6);
+clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);
+transform-origin:top;
+transition:.9s ease;
+z-index:3;
+}
+
+#envelope.open::before{
+transform:rotateX(180deg)
+}
+
+.letter{
+position:absolute;
+bottom:12px;
+left:50%;
+transform:translateX(-50%);
+width:90%;
+height:85%;
+background:#fffaf6;
+border-radius:4px;
+padding:18px;
+font-family:'Playfair Display',serif;
+font-size:15px;
+line-height:1.7;
+color:#4a3b40;
+opacity:0;
+transition:.9s ease;
+}
+
+#envelope.open .letter{
+bottom:95px;
+opacity:1;
+}
+
+/* Hearts */
+.heart{
+position:absolute;
+bottom:-20px;
+font-size:18px;
+color:rgba(236,162,173,.7);
+animation:floatUp 8s linear forwards;
+pointer-events:none;
+}
+
+@keyframes floatUp{
+0%{opacity:0;transform:translateY(0) scale(.8)}
+15%{opacity:1}
+100%{opacity:0;transform:translateY(-110vh) scale(1.4)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- YES / NO SCREEN -->
+<div class="screen" id="choice">
+<h1>Do you want to open something made just for you? 💗</h1>
+
+<img src="cat.png" id="ribbonCat" class="cat">
+<img src="crycat.png" id="crycat" class="cat">
+
+<button class="yes" onclick="yes()">Yes</button>
+<button class="no" id="noBtn" onclick="no()">No</button>
+
+<p id="convinceText"></p>
+</div>
+
+<!-- LETTER SCREEN -->
+<div class="screen hidden" id="letterScreen">
+<h1>Tap to open 💌</h1>
+
+<div class="envelope-wrapper">
+<div id="envelope">
+<div class="letter">
+<p><b>Heeyyyy mouuuu.</b></p>
+
+<p>
+I am grateful that you are there by my side.<br>
+Your presence makes me the happiest.
+</p>
+
+<p>
+This isn’t a proper confession but yk<br>
+I like you hehe 😝
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+let count=0;
+const lines=[
+"The cat is sad 🥺",
+"Look at that face please",
+"He believes in you 🐱💗",
+"Okay now you HAVE to 😭",
+"Opening it for you 😝"
+];
+
+const noBtn=document.getElementById("noBtn");
+
+function moveNo(){
+  const padding=20;
+  const maxX=window.innerWidth-noBtn.offsetWidth-padding;
+  const maxY=window.innerHeight-noBtn.offsetHeight-padding;
+
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
+
+  noBtn.style.left=x+"px";
+  noBtn.style.top=y+"px";
+}
+
+function no(){
+  document.getElementById("ribbonCat").style.display="none";
+  document.getElementById("crycat").style.display="block";
+
+  document.getElementById("convinceText").innerText=
+    lines[Math.min(count,lines.length-1)];
+  count++;
+
+  moveNo();
+}
+
+function yes(){
+  document.getElementById("ribbonCat").style.display="none";
+  document.getElementById("crycat").style.display="none";
+
+  document.getElementById("choice").classList.add("hidden");
+  document.getElementById("letterScreen").classList.remove("hidden");
+}
+
+const env=document.getElementById("envelope");
+let hearts=null;
+
+env.onclick=()=>{
+  env.classList.toggle("open");
+  if(env.classList.contains("open")) startHearts();
+  else stopHearts();
+};
+
+function startHearts(){
+  if(hearts) return;
+  hearts=setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💗";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=14+Math.random()*16+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),10000);
+  },600);
+}
+
+function stopHearts(){
+  clearInterval(hearts);
+  hearts=null;
+}
+</script>
+
+</body>
+</html>
